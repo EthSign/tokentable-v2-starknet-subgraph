@@ -52,6 +52,16 @@ export function handleOwnershipTransferred(
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.save();
+}
+
+export function handleInitialized(event: InitializedEvent): void {
+  const projectId = event.data[0]; // felt252
+
+  let entity = new Initialized(getAndIncrementGlobalCounter());
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+  entity.projectId = projectId;
 
   let global = new Global(GLOBAL_ID);
   global.counter = 0;
@@ -67,16 +77,6 @@ export function handleOwnershipTransferred(
   metadata.totalClaimingDelegateSetEventCount = 0;
   metadata.totalCancelDisabledEventCount = 0;
   metadata.save();
-}
-
-export function handleInitialized(event: InitializedEvent): void {
-  const projectId = event.data[0]; // felt252
-
-  let entity = new Initialized(getAndIncrementGlobalCounter());
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-  entity.projectId = projectId;
 }
 
 export function handlePresetCreated(event: PresetCreated): void {
