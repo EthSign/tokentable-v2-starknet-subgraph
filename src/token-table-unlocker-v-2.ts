@@ -26,11 +26,7 @@ const GLOBAL_ID = "GLOBAL_ID";
 const METADATA_ID = "METADATA_ID";
 
 function getAndIncrementGlobalCounter(): Bytes {
-  let entity = Global.load(GLOBAL_ID);
-  if (entity === null) {
-    entity = new Global(GLOBAL_ID);
-    entity.counter = 0;
-  }
+  let entity = Global.load(GLOBAL_ID)!;
   entity.counter++;
   entity.save();
   return Bytes.fromI32(entity.counter);
@@ -56,6 +52,21 @@ export function handleOwnershipTransferred(
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.save();
+
+  let global = new Global(GLOBAL_ID);
+  global.counter = 0;
+  global.save();
+
+  let metadata = new TTUV2InstanceMetadata(METADATA_ID);
+  metadata.totalAmountClaimed = BigInt.fromI32(0);
+  metadata.totalActualCancelledEventCount = 0;
+  metadata.totalActualCreatedEventCount = 0;
+  metadata.totalPresetCreatedEventCount = 0;
+  metadata.totalTokensClaimedEventCount = 0;
+  metadata.totalTokensWithdrawnEventCount = 0;
+  metadata.totalClaimingDelegateSetEventCount = 0;
+  metadata.totalCancelDisabledEventCount = 0;
+  metadata.save();
 }
 
 export function handleInitialized(event: InitializedEvent): void {
