@@ -1,0 +1,18 @@
+{
+  "name": "tokentable-v2-starknet-subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ ethsign/tokentable-v2-starknet-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ ethsign/tokentable-v2-starknet-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ ethsign/tokentable-v2-starknet-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ethsign/tokentable-v2-starknet-subgraph",
+    "test": "graph test"
+  },
+  "dependencies": {
+    "@starknet-graph/graph-cli": "0.58.0-1",
+    "@starknet-graph/graph-ts": "0.30.0"
+  },
+  "devDependencies": { "matchstick-as": "0.5.0" }
+}

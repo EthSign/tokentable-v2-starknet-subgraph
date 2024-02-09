@@ -1,0 +1,103 @@
+# Global
+type Global @entity {
+  id: String!
+  counter: Int!
+}
+
+# Deployer
+type TokenTableSuiteDeployed @entity(immutable: true) {
+  id: String!
+  from: Bytes! # address
+  projectToken: Bytes!
+  unlocker: Bytes! # address
+  futureToken: Bytes! # address
+  trackerToken: Bytes! # address
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# Unlocker
+enum TTEventType {
+  ActualCancelled
+  ActualCreated
+  PresetCreated
+  TokensClaimed
+  TokensWithdrawn
+  ClaimingDelegateSet
+  CancelDisabled
+  HookDisabled
+  WithdrawDisabled
+  FutureTokenTransferred
+  Deposit
+}
+
+type TTEvent @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes!
+  timestamp: BigInt!
+  transactionHash: Bytes!
+  event: TTEventType!
+  # projectId: String!
+  presetId: Bytes
+  actualId: BigInt
+  recipient: Bytes
+  recipientId: BigInt
+  caller: Bytes
+  by: Bytes
+  to: Bytes
+  delegate: Bytes
+  didWipeClaimableBalance: Boolean
+  amount: BigInt
+  feesCharged: BigInt
+  pendingAmountClaimable: BigInt
+  amountSkipped: BigInt
+  status: Boolean
+}
+
+type TTUV2InstanceMetadata @entity {
+  id: String!
+  totalAmountClaimed: BigInt!
+  totalActualCancelledEventCount: Int!
+  totalActualCreatedEventCount: Int!
+  totalPresetCreatedEventCount: Int!
+  totalTokensClaimedEventCount: Int!
+  totalTokensWithdrawnEventCount: Int!
+  totalClaimingDelegateSetEventCount: Int!
+  totalCancelDisabledEventCount: Int!
+}
+
+type Actual @entity {
+  id: String!
+  canceled: Boolean!
+  # projectId: String!
+  presetId: Bytes!
+  startTimestampAbsolute: BigInt!
+  amountClaimed: BigInt!
+  totalAmount: BigInt!
+}
+
+type Initialized @entity(immutable: true) {
+  id: Bytes!
+  # version: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  # contractAddress: Bytes!
+  projectId: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# FutureToken, not available
+type TokenTableUser @entity {
+  id: Bytes!
+  projectIds: [String!]
+  actualIds: [BigInt!]
+}

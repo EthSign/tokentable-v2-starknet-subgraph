@@ -1,0 +1,53 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: starknet
+    name: TTUnlocker
+    network: starknet-mainnet
+    source:
+      address: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"
+      startBlock: 0
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - PresetCreated
+        - ActualCreated
+        - TokensClaimed
+        - TokensWithdrawn
+        - ActualCancelled
+        - CancelDisabled
+        - HookDisabled
+        - WithdrawDisabled
+        - CreateDisabled
+        - ClaimingDelegateSet
+      abis:
+        - name: TTUnlocker
+          file: ./abis/TTUnlocker.json
+      eventHandlers:
+        - event: OwnershipTransferred
+          handler: handleOwnershipTransferred
+        - event: Initialized
+          handler: handleInitialized
+        - event: PresetCreated
+          handler: handlePresetCreated
+        - event: ActualCreated
+          handler: handleActualCreated
+        - event: TokensClaimed
+          handler: handleTokensClaimed
+        - event: TokensWithdrawn
+          handler: handleTokensWithdrawn
+        - event: ActualCancelled
+          handler: handleActualCancelled
+        - event: CancelDisabled
+          handler: handleCancelDisabled
+        - event: HookDisabled
+          handler: handleHookDisabled
+        - event: WithdrawDisabled
+          handler: handleWithdrawDisabled
+        - event: CreateDisabled
+          handler: handleCreateDisabled
+        - event: ClaimingDelegateSet
+          handler: handleClaimingDelegateSet
+      file: ./src/token-table-unlocker-v-2.ts

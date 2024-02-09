@@ -1,0 +1,86 @@
+[
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "Initialized",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "PresetCreated",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "ActualCreated",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "TokensClaimed",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "TokensWithdrawn",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "ActualCancelled",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "CancelDisabled",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "HookDisabled",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "WithdrawDisabled",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "CreateDisabled",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "name": "ClaimingDelegateSet",
+    "keys": [],
+    "data": [],
+    "inputs": []
+  }
+]
