@@ -6,12 +6,12 @@ type Global @entity {
 
 # Deployer
 type TokenTableSuiteDeployed @entity(immutable: true) {
-  id: String!
+  id: Bytes!
   from: Bytes! # address
   projectToken: Bytes!
   unlocker: Bytes! # address
   futureToken: Bytes! # address
-  trackerToken: Bytes! # address
+  # trackerToken: Bytes! # address
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
@@ -98,6 +98,5 @@ type OwnershipTransferred @entity(immutable: true) {
 # FutureToken, not available
 type TokenTableUser @entity {
   id: Bytes!
-  projectIds: [String!]
   actualIds: [BigInt!]
 }

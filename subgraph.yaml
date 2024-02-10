@@ -51,3 +51,39 @@ dataSources:
         - event: ClaimingDelegateSet
           handler: handleClaimingDelegateSet
       file: ./src/token-table-unlocker-v-2.ts
+  - kind: starknet
+    name: TTDeployer
+    network: starknet-mainnet
+    source:
+      address: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"
+      startBlock: 0
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - TokenTableSuiteDeployed
+      abis:
+        - name: TTDeployer
+          file: ./abis/TTDeployer.json
+      eventHandlers:
+        - event: TokenTableSuiteDeployed
+          handler: handleTokenTableSuiteDeployed
+      file: ./src/deployer.ts
+  - kind: starknet
+    name: TTFutureToken
+    network: starknet-mainnet
+    source:
+      address: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"
+      startBlock: 0
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: TTFutureToken
+          file: ./abis/TTFutureToken.json
+      eventHandlers:
+        - event: Transfer
+          handler: handleTransfer
+      file: ./src/future-token.ts

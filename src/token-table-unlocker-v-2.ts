@@ -21,6 +21,7 @@ import {
   Actual,
   OwnershipTransferred,
 } from "../generated/schema";
+import { u256ToBigInt } from "./utils";
 
 const GLOBAL_ID = "GLOBAL_ID";
 const METADATA_ID = "METADATA_ID";
@@ -30,13 +31,6 @@ function getAndIncrementGlobalCounter(): Bytes {
   entity.counter++;
   entity.save();
   return Bytes.fromI32(entity.counter);
-}
-
-function u256ToBigInt(lower: Bytes, upper: Bytes): BigInt {
-  return changetype<Felt>(upper)
-    .intoBigInt()
-    .leftShift(128)
-    .bitOr(changetype<Felt>(lower).intoBigInt());
 }
 
 export function handleOwnershipTransferred(
