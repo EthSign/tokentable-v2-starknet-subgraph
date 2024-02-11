@@ -1,0 +1,71 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: starknet
+    name: TTUnlocker
+    network: starknet-mainnet
+    source:
+      address: ""
+      startBlock: 0
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - PresetCreated
+        - ActualCreated
+        - TokensClaimed
+        - TokensWithdrawn
+        - ActualCancelled
+        - CancelDisabled
+        - HookDisabled
+        - WithdrawDisabled
+        - CreateDisabled
+        - ClaimingDelegateSet
+      abis:
+        - name: TTUnlocker
+          file: ./abis/TTUnlocker.json
+      eventHandlers:
+        - event: OwnershipTransferred
+          handler: handleOwnershipTransferred
+        - event: Initialized
+          handler: handleInitialized
+        - event: PresetCreated
+          handler: handlePresetCreated
+        - event: ActualCreated
+          handler: handleActualCreated
+        - event: TokensClaimed
+          handler: handleTokensClaimed
+        - event: TokensWithdrawn
+          handler: handleTokensWithdrawn
+        - event: ActualCancelled
+          handler: handleActualCancelled
+        - event: CancelDisabled
+          handler: handleCancelDisabled
+        - event: HookDisabled
+          handler: handleHookDisabled
+        - event: WithdrawDisabled
+          handler: handleWithdrawDisabled
+        - event: CreateDisabled
+          handler: handleCreateDisabled
+        - event: ClaimingDelegateSet
+          handler: handleClaimingDelegateSet
+      file: ./src/token-table-unlocker-v-2.ts
+  - kind: starknet
+    name: TTFutureToken
+    network: starknet-mainnet
+    source:
+      address: ""
+      startBlock: 0
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: TTFutureToken
+          file: ./abis/TTFutureToken.json
+      eventHandlers:
+        - event: Transfer
+          handler: handleTransfer
+      file: ./src/future-token.ts
