@@ -27,7 +27,11 @@ const GLOBAL_ID = "GLOBAL_ID";
 const METADATA_ID = "METADATA_ID";
 
 function getAndIncrementGlobalCounter(): Bytes {
-  let entity = Global.load(GLOBAL_ID)!;
+  let entity = Global.load(GLOBAL_ID);
+  if (entity === null) {
+    entity = new Global(GLOBAL_ID);
+    entity.counter = 0;
+  }
   entity.counter++;
   entity.save();
   return Bytes.fromI32(entity.counter);
@@ -56,10 +60,7 @@ export function handleInitialized(event: InitializedEvent): void {
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.projectId = projectId;
-
-  let global = new Global(GLOBAL_ID);
-  global.counter = 0;
-  global.save();
+  entity.save();
 
   let metadata = new TTUV2InstanceMetadata(METADATA_ID);
   metadata.totalAmountClaimed = BigInt.fromI32(0);
@@ -74,12 +75,13 @@ export function handleInitialized(event: InitializedEvent): void {
 }
 
 export function handlePresetCreated(event: PresetCreated): void {
-  const presetId = event.data[0]; // felt252
-  const recipientId = changetype<Felt>(event.data[1]).intoBigInt(); // u64
+  const from = event.data[0]; // ContractAddress
+  const presetId = event.data[1]; // felt252
+  const recipientId = changetype<Felt>(event.data[2]).intoBigInt(); // u64
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "PresetCreated";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.presetId = presetId;
   entity.transactionHash = event.transaction.hash;
@@ -92,17 +94,18 @@ export function handlePresetCreated(event: PresetCreated): void {
 }
 
 export function handleActualCreated(event: ActualCreated): void {
-  const presetId = event.data[0]; // felt252
-  const actualId = u256ToBigInt(event.data[1], event.data[2]); // u256
-  const recipient = event.data[3]; // ContractAddress
-  const startTimestampAbsolute = changetype<Felt>(event.data[4]).intoBigInt(); // u64
-  const amountSkipped = u256ToBigInt(event.data[5], event.data[6]); // u256
-  const totalAmount = u256ToBigInt(event.data[7], event.data[8]); // u256
-  const recipientId = changetype<Felt>(event.data[9]).intoBigInt(); // u64
+  const from = event.data[0]; // ContractAddress
+  const presetId = event.data[1]; // felt252
+  const actualId = u256ToBigInt(event.data[2], event.data[3]); // u256
+  const recipient = event.data[4]; // ContractAddress
+  const startTimestampAbsolute = changetype<Felt>(event.data[5]).intoBigInt(); // u64
+  const amountSkipped = u256ToBigInt(event.data[6], event.data[7]); // u256
+  const totalAmount = u256ToBigInt(event.data[8], event.data[9]); // u256
+  const recipientId = changetype<Felt>(event.data[10]).intoBigInt(); // u64
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "ActualCreated";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.presetId = presetId;
   entity.actualId = actualId;
@@ -134,11 +137,10 @@ export function handleTokensClaimed(event: TokensClaimed): void {
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "TokensClaimed";
-  entity.from = event.fromAddr;
+  entity.from = caller;
   entity.timestamp = event.block.timestamp;
   entity.actualId = actualId;
   entity.to = to;
-  entity.caller = caller;
   entity.amount = amount;
   entity.feesCharged = feesCharged;
   entity.transactionHash = event.transaction.hash;
@@ -161,9 +163,8 @@ export function handleTokensWithdrawn(event: TokensWithdrawn): void {
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "TokensWithdrawn";
-  entity.from = event.fromAddr;
+  entity.from = by;
   entity.timestamp = event.block.timestamp;
-  entity.by = by;
   entity.amount = amount;
   entity.transactionHash = event.transaction.hash;
   entity.save();
@@ -174,14 +175,15 @@ export function handleTokensWithdrawn(event: TokensWithdrawn): void {
 }
 
 export function handleActualCancelled(event: ActualCancelled): void {
-  const actualId = u256ToBigInt(event.data[0], event.data[1]); // u256
-  const pendingAmountClaimable = u256ToBigInt(event.data[1], event.data[2]); // u256
-  const didWipeClaimableBalance = event.data[2]; // bool
-  const recipientId = changetype<Felt>(event.data[3]).intoBigInt(); // u64
+  const from = event.data[0]; // ContractAddress
+  const actualId = u256ToBigInt(event.data[1], event.data[2]); // u256
+  const pendingAmountClaimable = u256ToBigInt(event.data[3], event.data[4]); // u256
+  const didWipeClaimableBalance = event.data[5]; // bool
+  const recipientId = changetype<Felt>(event.data[6]).intoBigInt(); // u64
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "ActualCancelled";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.actualId = actualId;
   entity.pendingAmountClaimable = pendingAmountClaimable;
@@ -200,9 +202,10 @@ export function handleActualCancelled(event: ActualCancelled): void {
 }
 
 export function handleCancelDisabled(event: CancelDisabled): void {
+  const from = event.data[0]; // ContractAddress
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "CancelDisabled";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.save();
@@ -213,38 +216,42 @@ export function handleCancelDisabled(event: CancelDisabled): void {
 }
 
 export function handleHookDisabled(event: HookDisabled): void {
+  const from = event.data[0]; // ContractAddress
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "HookDisabled";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.save();
 }
 
 export function handleWithdrawDisabled(event: WithdrawDisabled): void {
+  const from = event.data[0]; // ContractAddress
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "WithdrawDisabled";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.save();
 }
 
 export function handleCreateDisabled(event: CreateDisabled): void {
+  const from = event.data[0]; // ContractAddress
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "CreateDisabled";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
   entity.save();
 }
 
 export function handleClaimingDelegateSet(event: ClaimingDelegateSet): void {
-  const delegate = event.data[0]; // ContractAddress
+  const from = event.data[0]; // ContractAddress
+  const delegate = event.data[1]; // ContractAddress
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.event = "ClaimingDelegateSet";
-  entity.from = event.fromAddr;
+  entity.from = from;
   entity.timestamp = event.block.timestamp;
   entity.delegate = delegate;
   entity.transactionHash = event.transaction.hash;

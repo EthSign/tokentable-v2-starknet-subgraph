@@ -6,8 +6,8 @@ dataSources:
     name: TTUnlocker
     network: starknet-mainnet
     source:
-      address: ""
-      startBlock: 0
+      address: "0x6509404f9d664d6ee4921eb7d93b8d59b004c82bf4557356a9f0a846b2d50f2"
+      startBlock: 539689
     mapping:
       apiVersion: 0.0.6
       language: wasm/assemblyscript
@@ -55,8 +55,8 @@ dataSources:
     name: TTFutureToken
     network: starknet-mainnet
     source:
-      address: ""
-      startBlock: 0
+      address: "0x7683480cf9e01c6110bc71fd5375eb53dd45dc41b7732896f8fc7bcf14b5025"
+      startBlock: 539689
     mapping:
       apiVersion: 0.0.6
       language: wasm/assemblyscript

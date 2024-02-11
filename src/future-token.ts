@@ -1,4 +1,4 @@
-import { BigInt } from "@starknet-graph/graph-ts";
+import { BigInt, log } from "@starknet-graph/graph-ts";
 import { Transfer } from "../generated/TTFutureToken/TTFutureToken";
 import { TTEvent, TokenTableUser } from "../generated/schema";
 import { u256ToBigInt } from "./utils";
@@ -15,7 +15,7 @@ function findIndexWithMatching(actualId: BigInt, actualIds: BigInt[]): i32 {
 export function handleTransfer(event: Transfer): void {
   const from = event.data[0];
   const to = event.data[1];
-  const actualId = u256ToBigInt(event.data[3], event.data[4]);
+  const actualId = u256ToBigInt(event.data[2], event.data[3]);
   if (from.toI32() != 0) {
     let fromUser = TokenTableUser.load(from)!;
     const indexToRemoveFromFrom = findIndexWithMatching(
