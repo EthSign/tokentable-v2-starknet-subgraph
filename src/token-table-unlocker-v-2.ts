@@ -111,6 +111,7 @@ export function handleActualCreated(event: ActualCreated): void {
   const amountSkipped = u256ToBigInt(event.data[6], event.data[7]); // u256
   const totalAmount = u256ToBigInt(event.data[8], event.data[9]); // u256
   const recipientId = changetype<Felt>(event.data[10]).intoBigInt(); // u64
+  const batchId = changetype<Felt>(event.data[11]).intoBigInt(); // u64
 
   let entity = new TTEvent(getAndIncrementGlobalCounter());
   entity.projectId = getProjectId();
@@ -121,6 +122,7 @@ export function handleActualCreated(event: ActualCreated): void {
   entity.actualId = actualId;
   entity.recipient = recipient;
   entity.recipientId = recipientId;
+  entity.batchId = batchId;
   entity.transactionHash = event.transaction.hash;
   entity.save();
 

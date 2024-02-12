@@ -43,6 +43,7 @@ type TTEvent @entity(immutable: true) {
   actualId: BigInt
   recipient: Bytes
   recipientId: BigInt
+  batchId: BigInt
   caller: Bytes
   by: Bytes
   to: Bytes
