@@ -2,6 +2,7 @@
 type Global @entity {
   id: String!
   counter: Int!
+  projectId: String
 }
 
 # Deployer
@@ -37,11 +38,13 @@ type TTEvent @entity(immutable: true) {
   timestamp: BigInt!
   transactionHash: Bytes!
   event: TTEventType!
-  # projectId: String!
+  projectId: String!
   presetId: Bytes
   actualId: BigInt
   recipient: Bytes
   recipientId: BigInt
+  caller: Bytes
+  by: Bytes
   to: Bytes
   delegate: Bytes
   didWipeClaimableBalance: Boolean
