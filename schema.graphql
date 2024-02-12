@@ -38,7 +38,7 @@ type TTEvent @entity(immutable: true) {
   timestamp: BigInt!
   transactionHash: Bytes!
   event: TTEventType!
-  projectId: String!
+  projectId: String
   presetId: Bytes
   actualId: BigInt
   recipient: Bytes
