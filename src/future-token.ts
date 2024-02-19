@@ -1,4 +1,4 @@
-import { BigInt, log } from "@starknet-graph/graph-ts";
+import { BigInt, Bytes, log } from "@starknet-graph/graph-ts";
 import { Transfer } from "../generated/TTFutureToken/TTFutureToken";
 import { TTEvent, TokenTableUser } from "../generated/schema";
 import { u256ToBigInt } from "./utils";
@@ -38,7 +38,12 @@ export function handleTransfer(event: Transfer): void {
   }
   toUser.save();
 
-  let entity = new TTEvent(event.data[1]);
+  let entity = new TTEvent(
+    event.transaction.hash
+      .concat(from)
+      .concat(to)
+      .concat(changetype<Bytes>(actualId))
+  );
   entity.event = "FutureTokenTransferred";
   entity.from = from;
   entity.to = to;

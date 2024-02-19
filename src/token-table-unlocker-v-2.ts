@@ -47,7 +47,9 @@ export function handleOwnershipTransferred(
   const previousOwner = event.data[0]; // ContractAddress
   const newOwner = event.data[1]; // ContractAddress
 
-  let entity = new OwnershipTransferred(getAndIncrementGlobalCounter());
+  let entity = new OwnershipTransferred(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.previousOwner = previousOwner;
   entity.newOwner = newOwner;
   entity.blockNumber = event.block.number;
@@ -59,7 +61,9 @@ export function handleOwnershipTransferred(
 export function handleInitialized(event: InitializedEvent): void {
   const projectId = event.data[0]; // felt252
 
-  let entity = new Initialized(getAndIncrementGlobalCounter());
+  let entity = new Initialized(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
@@ -78,16 +82,18 @@ export function handleInitialized(event: InitializedEvent): void {
   metadata.save();
 
   let global = Global.load(GLOBAL_ID)!;
-  global.projectId = projectId.toHexString();
+  global.projectId = projectId.toString();
   global.save();
 }
 
 export function handlePresetCreated(event: PresetCreated): void {
   const from = event.data[0]; // ContractAddress
-  const presetId = event.data[1]; // felt252
+  const presetId = event.data[1].toHexString(); // felt252
   const recipientId = changetype<Felt>(event.data[2]).intoBigInt(); // u64
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "PresetCreated";
   entity.from = from;
@@ -104,7 +110,7 @@ export function handlePresetCreated(event: PresetCreated): void {
 
 export function handleActualCreated(event: ActualCreated): void {
   const from = event.data[0]; // ContractAddress
-  const presetId = event.data[1]; // felt252
+  const presetId = event.data[1].toHexString(); // felt252
   const actualId = u256ToBigInt(event.data[2], event.data[3]); // u256
   const recipient = event.data[4]; // ContractAddress
   const startTimestampAbsolute = changetype<Felt>(event.data[5]).intoBigInt(); // u64
@@ -113,7 +119,9 @@ export function handleActualCreated(event: ActualCreated): void {
   const recipientId = changetype<Felt>(event.data[10]).intoBigInt(); // u64
   const batchId = changetype<Felt>(event.data[11]).intoBigInt(); // u64
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "ActualCreated";
   entity.from = from;
@@ -147,7 +155,9 @@ export function handleTokensClaimed(event: TokensClaimed): void {
   const feesCharged = u256ToBigInt(event.data[6], event.data[7]); // u256
   const recipientId = changetype<Felt>(event.data[8]).intoBigInt(); // u64
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "TokensClaimed";
   entity.from = caller;
@@ -175,7 +185,9 @@ export function handleTokensWithdrawn(event: TokensWithdrawn): void {
   const by = event.data[0]; // ContractAddress
   const amount = u256ToBigInt(event.data[1], event.data[2]); // u256
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "TokensWithdrawn";
   entity.from = by;
@@ -197,7 +209,9 @@ export function handleActualCancelled(event: ActualCancelled): void {
   const didWipeClaimableBalance = event.data[5]; // bool
   const recipientId = changetype<Felt>(event.data[6]).intoBigInt(); // u64
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "ActualCancelled";
   entity.from = from;
@@ -221,7 +235,9 @@ export function handleActualCancelled(event: ActualCancelled): void {
 export function handleCancelDisabled(event: CancelDisabled): void {
   const from = event.data[0]; // ContractAddress
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "CancelDisabled";
   entity.from = from;
@@ -237,7 +253,9 @@ export function handleCancelDisabled(event: CancelDisabled): void {
 export function handleHookDisabled(event: HookDisabled): void {
   const from = event.data[0]; // ContractAddress
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "HookDisabled";
   entity.from = from;
@@ -249,7 +267,9 @@ export function handleHookDisabled(event: HookDisabled): void {
 export function handleWithdrawDisabled(event: WithdrawDisabled): void {
   const from = event.data[0]; // ContractAddress
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "WithdrawDisabled";
   entity.from = from;
@@ -261,7 +281,9 @@ export function handleWithdrawDisabled(event: WithdrawDisabled): void {
 export function handleCreateDisabled(event: CreateDisabled): void {
   const from = event.data[0]; // ContractAddress
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "CreateDisabled";
   entity.from = from;
@@ -274,7 +296,9 @@ export function handleClaimingDelegateSet(event: ClaimingDelegateSet): void {
   const from = event.data[0]; // ContractAddress
   const delegate = event.data[1]; // ContractAddress
 
-  let entity = new TTEvent(getAndIncrementGlobalCounter());
+  let entity = new TTEvent(
+    getAndIncrementGlobalCounter().concat(event.transaction.hash)
+  );
   entity.projectId = getProjectId();
   entity.event = "ClaimingDelegateSet";
   entity.from = from;

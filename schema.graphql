@@ -39,7 +39,7 @@ type TTEvent @entity(immutable: true) {
   transactionHash: Bytes!
   event: TTEventType!
   projectId: String
-  presetId: Bytes
+  presetId: String
   actualId: BigInt
   recipient: Bytes
   recipientId: BigInt
@@ -72,7 +72,7 @@ type Actual @entity {
   id: String!
   canceled: Boolean!
   # projectId: String!
-  presetId: Bytes!
+  presetId: String!
   startTimestampAbsolute: BigInt!
   amountClaimed: BigInt!
   totalAmount: BigInt!
