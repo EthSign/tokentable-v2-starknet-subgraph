@@ -132,6 +132,7 @@ export function handleActualCreated(event: ActualCreated): void {
   entity.recipientId = recipientId;
   entity.batchId = batchId;
   entity.transactionHash = event.transaction.hash;
+  entity.amountSkipped = amountSkipped;
   entity.save();
 
   let actual = new Actual(actualId.toHexString());
@@ -206,7 +207,7 @@ export function handleActualCancelled(event: ActualCancelled): void {
   const from = event.data[0]; // ContractAddress
   const actualId = u256ToBigInt(event.data[1], event.data[2]); // u256
   const pendingAmountClaimable = u256ToBigInt(event.data[3], event.data[4]); // u256
-  const didWipeClaimableBalance = event.data[5]; // bool
+  const didWipeClaimableBalance = changetype<Felt>(event.data[5]).intoBigInt(); // bool
   const recipientId = changetype<Felt>(event.data[6]).intoBigInt(); // u64
 
   let entity = new TTEvent(
