@@ -44,8 +44,8 @@ function getAndIncrementGlobalCounter(): Bytes {
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  const previousOwner = event.data[0]; // ContractAddress
-  const newOwner = event.data[1]; // ContractAddress
+  const previousOwner = event.keys[1]; // ContractAddress
+  const newOwner = event.keys[2]; // ContractAddress
 
   let entity = new OwnershipTransferred(
     getAndIncrementGlobalCounter().concat(event.transaction.hash)
